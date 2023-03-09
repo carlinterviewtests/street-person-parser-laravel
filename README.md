@@ -7,61 +7,84 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Homeowner Data CSV Parser
+This project provides a solution for parsing a CSV file containing homeowner data provided by an estate agent. 
+The CSV contains data where multiple homeowners have been entered into one field, often in different formats. 
+The provided solution accepts the CSV and outputs an array of people, splitting the name into the correct fields, 
+and splitting multiple people from one string where appropriate.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Getting Started
+To use this project, you will need to have the following software installed:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 7.4 or higher
+- Composer
+- Laravel 8.0 or higher
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Once you have these prerequisites installed, follow these steps to get started:
 
-## Learning Laravel
+Clone this repository to your local machine.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+To install project dependancies run:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Start the Laravel development server by running:
 
-## Laravel Sponsors
+```
+php artisan serve
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Open Postman and use a GET request to hit this endpoint. http://localhost:8000/upload-person-csv  (No Auth Needed)
 
-### Premium Partners
+Currently the project returns a Dump and Die to present the data in the format requested but on the next line down there is a return which can be uncommented.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Features
 
-## Contributing
+- Parses a CSV file containing homeowner data provided by an estate agent.
+- Outputs an array of people objects with the correct fields for each person.
+- Splits the name into the correct fields.
+- Splits multiple people from one string where appropriate.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Changes Made
+This project introduces four new files:
 
-## Code of Conduct
+- **CsvPersonParser.php:** This file contains the implementation of the CsvPersonParser class. The class is responsible for reading in the CSV file and converting it to an array of people objects with the correct fields for each person.
+- **PersonController.php:** This file contains the implementation of the uploadPersonCSV method which calls the parse method of the CsvPersonParser class and returns the resulting array of people.
+- **api.php:** This file contains a new route that points to the uploadPersonCSV method of the PersonController class.
+- **CsvPersonParserTest.php:** This file contains unit tests for the CsvPersonParser class.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+### Usage
+The project default csv is provided within the codebase at the following location:
+storage/person-fixtures/people.csv 
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The CSV includes the following columns:
 
-## License
+- title
+- first_name
+- initial
+- last_name
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-"# street-person-parser-laravel" 
+
+Should you want to swap out the csv file it is referenced on **L:14 in the PersonController**
+
+### Tests
+Unit tests have been created and added to the tests folder and all pass.
+To run the test suite you will need phpunit installed and can trigger the tests by entering the following into the terminal.
+```
+vendor/bin/phpunit --filter CsvPersonParserTest
+```
+
+### Future Improvements
+- In the future this project could be improved apon by the following refactor:
+ - Refactoring Person to their own Scheme which would make the code easier to maintain should it need to upscale
+
+### Screenshots
+![image](https://user-images.githubusercontent.com/127329407/224027118-b18e0ee8-48f1-4bc8-bdab-d824c2db12dd.png)
+![image](https://user-images.githubusercontent.com/127329407/224027221-b6811920-e7d6-4d99-a1a7-4e0364b51484.png)
+![image](https://user-images.githubusercontent.com/127329407/224027335-00f6a448-a0aa-4929-b4d8-74e5f8029883.png)
+![image](https://user-images.githubusercontent.com/127329407/224028118-07bf73cd-5abc-4191-8dcb-89422d049fa5.png)
+
+
